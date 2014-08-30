@@ -51,7 +51,7 @@
 	  zip = __webpack_require__(1);
 	  sax = __webpack_require__(5);
 	  utils = __webpack_require__(2);
-	  zip.workerScriptsPath = '/js/';
+	  zip.workerScriptsPath = './js/';
 	  parser = sax.parser(true);
 	  parser.onopentag = function(node){
 	    return console.log(utils.namespace(node.name));

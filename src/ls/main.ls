@@ -5,7 +5,7 @@ sax       = require 'sax'
 utils     = require './utils'
 
 # setup
-zip.workerScriptsPath = '/js/'
+zip.workerScriptsPath = './js/'
 parser = sax.parser true # strict
 
 parser.onopentag = (node) ->
