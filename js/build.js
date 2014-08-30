@@ -45,18 +45,30 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	(function(){
-	  var $, dragDrop, zip, sax, utils, parser;
+	  var $, dragDrop, zip, sax, utils, parser, counter, x$;
 	  $ = __webpack_require__(4);
 	  dragDrop = __webpack_require__(3);
 	  zip = __webpack_require__(1);
 	  sax = __webpack_require__(5);
 	  utils = __webpack_require__(2);
 	  zip.workerScriptsPath = './js/';
-	  parser = sax.parser(true);
-	  parser.onopentag = function(node){
-	    return console.log(utils.namespace(node.name));
+	  parser = sax.parser(false, {
+	    lowercase: true,
+	    xmlns: true
+	  });
+	  counter = 0;
+	  x$ = parser;
+	  x$.onopentag = function(node){
+	    import$(node, utils.namespace(node.name));
+	    return counter++;
 	  };
-	  console.log(zip);
+	  x$.onend = function(){
+	    return console.log(counter + " nodes parsed");
+	  };
+	  x$.onerror = function(err){
+	    console.log(err);
+	    return parser.error = null;
+	  };
 	  dragDrop('#dropzone', function(files){
 	    var i$, len$, file, results$ = [];
 	    for (i$ = 0, len$ = files.length; i$ < len$; ++i$) {
@@ -67,6 +79,7 @@
 	    function fn$(reader){
 	      return reader.getEntries(function(entries){
 	        var i$, len$, entry, ref$, results$ = [];
+	        console.log('unzipped');
 	        for (i$ = 0, len$ = entries.length; i$ < len$; ++i$) {
 	          entry = entries[i$];
 	          if ((ref$ = entry.filename) === 'content.xml' || ref$ === 'styles.xml') {
@@ -75,11 +88,17 @@
 	        }
 	        return results$;
 	        function fn$(data){
+	          console.log('parsing');
 	          return parser.write(data).close();
 	        }
 	      });
 	    }
 	  });
+	  function import$(obj, src){
+	    var own = {}.hasOwnProperty;
+	    for (var key in src) if (own.call(src, key)) obj[key] = src[key];
+	    return obj;
+	  }
 	}).call(this);
 
 
@@ -13346,7 +13365,7 @@
 	module.exports = Readable;
 
 	/*<replacement>*/
-	var isArray = __webpack_require__(34);
+	var isArray = __webpack_require__(33);
 	/*</replacement>*/
 
 
@@ -14274,7 +14293,7 @@
 	  return -1;
 	}
 	
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(33)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(34)))
 
 /***/ },
 /* 26 */
@@ -14758,7 +14777,7 @@
 	  state.ended = true;
 	}
 	
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(33)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(34)))
 
 /***/ },
 /* 27 */
@@ -14854,7 +14873,7 @@
 	  }
 	}
 	
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(33)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(34)))
 
 /***/ },
 /* 28 */
@@ -15193,6 +15212,15 @@
 /* 33 */
 /***/ function(module, exports, __webpack_require__) {
 
+	module.exports = Array.isArray || function (arr) {
+	  return Object.prototype.toString.call(arr) == '[object Array]';
+	};
+
+
+/***/ },
+/* 34 */
+/***/ function(module, exports, __webpack_require__) {
+
 	// shim for using process in browser
 
 	var process = module.exports = {};
@@ -15255,15 +15283,6 @@
 	process.cwd = function () { return '/' };
 	process.chdir = function (dir) {
 	    throw new Error('process.chdir is not supported');
-	};
-
-
-/***/ },
-/* 34 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = Array.isArray || function (arr) {
-	  return Object.prototype.toString.call(arr) == '[object Array]';
 	};
 
 
