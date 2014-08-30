@@ -13,24 +13,26 @@ path =
 
 gulp.task \js ->
   gulp.src [
-    "#{path.src}/**/*.ls"
+    "#{path.src}/ls/**/*.ls"
   ]
     .pipe livescript!
     .pipe gulp.dest "#{path.dest}/"
 
 gulp.task \webpack <[js]> ->
   gulp
-    .src "#{path.dest}/ls/main.js"
+    .src "#{path.dest}/main.js"
     .pipe webpack do
-      context: "#{path.dest}/ls/"
+      context: "#{path.dest}/"
       output:
         filename: 'build.js'
+      externals:
+        zip: 'zip'
     .pipe gulp.dest "#{path.build}/js"
     .pipe connect.reload!
 
 gulp.task \css ->
   gulp.src [
-    "#{path.src}/**/*.styl"
+    "#{path.src}/stylus/**/*.styl"
   ]
     .pipe gulp-concat 'style.styl'
     .pipe stylus use: <[nib]>
@@ -47,9 +49,8 @@ gulp.task \build <[webpack css html]>
 
 gulp.task \watch <[build]> ->
   gulp
-    ..watch 'bower.json'             <[vendor]>
-    ..watch "#{path.src}/**/*.ls"    <[webpack]>
-    ..watch "#{path.src}/**/*.styl"  <[css]>
+    ..watch "#{path.src}/ls/**/*.ls"    <[webpack]>
+    ..watch "#{path.src}/stylus/**/*.styl"  <[css]>
     ..watch "#{path.src}/*.jade"     <[html]>
 
 gulp.task \server <[watch]> ->

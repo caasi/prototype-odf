@@ -89,3 +89,28 @@ td {
 a img {
   border: none;
 }
+#dropzone {
+  position: absolute;
+  width: 322px;
+  height: 200px;
+  margin: auto;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background: #16161d;
+  color: #f90;
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+  font-family: monospace;
+  font-weight: bold;
+  text-align: center;
+}
+#dropzone span {
+  display: inline-block;
+  vertical-align: middle;
+}
+#dropzone #vertical-aligner {
+  width: 0;
+  height: 100%;
+}
