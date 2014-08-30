@@ -2,6 +2,10 @@
 
 global-reset()
 
+body
+  background #16161D
+  font-size 140%
+
 #dropzone
   position absolute
   width  322px
@@ -11,8 +15,8 @@ global-reset()
   top    0
   right  0
   bottom 0
-  background #16161D
-  color #F90
+  background #F90
+  color #16161D
   border-radius 10px
   font-family monospace
   font-weight bold
@@ -23,3 +27,15 @@ global-reset()
   #vertical-aligner
     width  0
     height 100%
+
+#odf
+  ul
+    margin-left 2em
+  .tag
+    color #F90
+  .attribute
+    .key
+      color #F60
+      margin-right .5em
+    .value
+      color #CCC

@@ -89,6 +89,10 @@ td {
 a img {
   border: none;
 }
+body {
+  background: #16161d;
+  font-size: 140%;
+}
 #dropzone {
   position: absolute;
   width: 322px;
@@ -98,8 +102,8 @@ a img {
   top: 0;
   right: 0;
   bottom: 0;
-  background: #16161d;
-  color: #f90;
+  background: #f90;
+  color: #16161d;
   -webkit-border-radius: 10px;
   border-radius: 10px;
   font-family: monospace;
@@ -113,4 +117,17 @@ a img {
 #dropzone #vertical-aligner {
   width: 0;
   height: 100%;
+}
+#odf ul {
+  margin-left: 2em;
+}
+#odf .tag {
+  color: #f90;
+}
+#odf .attribute .key {
+  color: #f60;
+  margin-right: 0.5em;
+}
+#odf .attribute .value {
+  color: #ccc;
 }
