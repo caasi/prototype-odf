@@ -1,13 +1,32 @@
-require! <[gulp gulp-concat gulp-filter gulp-flatten]>
-connect    = require \gulp-connect
+require! <[gulp gulp-concat]>
 gutil      = require \gulp-util
+webpack    = require \gulp-webpack
+connect    = require \gulp-connect
 livescript = require \gulp-livescript
 stylus     = require \gulp-stylus
 jade       = require \gulp-jade
 
 path =
-  src:   './src'
-  build: '.'
+  src:   "#__dirname/src"
+  dest:  "#__dirname/dest"
+  build: __dirname
+
+gulp.task \js ->
+  gulp.src [
+    "#{path.src}/**/*.ls"
+  ]
+    .pipe livescript!
+    .pipe gulp.dest "#{path.dest}/"
+
+gulp.task \webpack <[js]> ->
+  gulp
+    .src "#{path.dest}/ls/main.js"
+    .pipe webpack do
+      context: "#{path.dest}/ls/"
+      output:
+        filename: 'build.js'
+    .pipe gulp.dest "#{path.build}/js"
+    .pipe connect.reload!
 
 gulp.task \css ->
   gulp.src [
@@ -24,12 +43,12 @@ gulp.task \html ->
     .pipe gulp.dest path.build
     .pipe connect.reload!
 
-gulp.task \build <[css html]>
+gulp.task \build <[webpack css html]>
 
 gulp.task \watch <[build]> ->
   gulp
     ..watch 'bower.json'             <[vendor]>
-    #..watch "#{path.src}/**/*.ls"    <[js]>
+    ..watch "#{path.src}/**/*.ls"    <[webpack]>
     ..watch "#{path.src}/**/*.styl"  <[css]>
     ..watch "#{path.src}/*.jade"     <[html]>
 
