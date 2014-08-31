@@ -41,6 +41,7 @@ parser = sax.parser false, lowercase: on xmlns: on
 counter = 0
 root = null
 stack = []
+named-tags = {}
 
 parser
   ..onopentag  = !(node) ->
@@ -52,12 +53,19 @@ parser
     else
       root := box
     stack.push box
+    for key, attr of node.attributes
+      if attr.local is 'name'
+        named-tags[attr.name] ?= {}
+        if named-tags[attr.name][attr.value]
+          throw new Error "duplicated nodes #key, #{attr.value}"
+        named-tags[attr.name][attr.value] = node
     counter++
   ..onclosetag = !-> stack.pop!
   ..onend      = !->
     $ '#dropzone' .hide!
     console.log root
     console.log "#counter nodes parsed"
+    console.log named-tags
     React.renderComponent do
       ODFNode data: root
       document.getElementById 'odf'
